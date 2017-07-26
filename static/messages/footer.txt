@@ -1,0 +1,45 @@
+<div class="ft-cl">
+<div id='ft-info'>
+<h1>Piggah Bro Studios</h1>
+<b>Programming The World</b><br><br>
+<a href="mailto:piggahbro@gmail.com" style="text-decoration: none;"><div style="width: 20px; height: 20px; font-size: 24px; vertical-align: middle; background-color: #FFF; display: inline-block; border-radius: 15px; line-height: 20px; color: #0AF; padding: 5px;"><i class='ion ion-email' style="margin-top: -2px;"></i></div> piggahbro@gmail.com</a></div>
+</div>
+<div class="ft-cc">
+<br>
+<table>
+    <tr>
+        <td><a href="/">Home</a></td>
+        <td><a href="/blog">Blog</a></td>
+    </tr>
+    <tr>
+        <td><a href="/products">Products</a></td>
+        <td><a href="/services">Services</a></td>
+    </tr>
+    <tr>
+        <td colspan=2><a href="/login">Login</a></td>
+    </tr>
+</table>
+</div>
+<div class="ft-cr">
+<br>
+<table>
+    <tr>
+        <td>
+            <a href="https://facebook.com/PiggahBroStudios" target="_BLANK">Facebook <div style="width: 15px; height: 15px; font-size: 18px; vertical-align: middle; background-color: #FFF; display: inline-block; border-radius: 15px; line-height: 20px; color: #0AF; padding: 5px; text-align: center;"> <i class='ion ion-social-facebook' style="margin: -2px auto 0 auto; display: block;"></i></div>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="https://twitter.com/piggahbro" target="_BLANK">Twitter <div style="width: 15px; height: 15px; font-size: 18px; vertical-align: middle; background-color: #FFF; display: inline-block; border-radius: 15px; line-height: 20px; color: #0AF; padding: 5px; text-align: center;"> <i class='ion ion-social-twitter' style="margin: -1px auto 0 auto; display: block;"></i></div>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="https://github.com/PiggahBroStudios" target="_BLANK">Github
+            <div style="width: 15px; height: 15px; font-size: 18px; vertical-align: middle; background-color: #FFF; display: inline-block; border-radius: 15px; line-height: 20px; color: #0AF; padding: 5px; text-align: center;"><i class='ion ion-social-github' style="margin: -2px 0 0 -0.5px; display: block;"></i></div> </a>
+        </td>
+    </tr>
+</table>
+</div>

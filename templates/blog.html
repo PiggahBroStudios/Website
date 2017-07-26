@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+    <head>
+        <title>Blog | Piggah Bro Studios</title>
+		<link rel='stylesheet' href='/static/{{ version }}/main.css'/>
+		<link rel='stylesheet' href='/static/css/ionicons.min.css'/>
+		<link rel="icon" type="image/png" href="/static/image/logo.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="This page displays all of the blogs by people working at Piggah Bro Studios">
+		<meta name="author" content="Dylan Bulmer">
+    </head>
+    <body>
+		<nav style="border-top: 0;">
+		    {{ nav | safe }}
+		</nav>
+		<section>
+			<aside>
+			    <profileHeader>
+			        <name style="text-align:center;">Official Members</name>
+		        </profileHeader>
+			    <profileTab>
+			        <name>Dylan Bulmer</name>
+			        <rank>Founder, Lead Programmer</rank>
+			        <twitter>Twitter: <a href="https://twitter.com/piggahbrostudio" target="_BLANK">@PiggahBroStudio</a></twitter>
+		        </profileTab>
+			    <profileTab>
+			        <name>Nysa Chartier</name>
+			        <rank>Co Founder, Story Editor</rank>
+			        <twitter>Twitter: <a href="https://twitter.com/RadioactivePRN" target="_BLANK">@RadioactivePRN</a></twitter>
+		        </profileTab>
+			    <profileHeader>
+			        <name style="text-align:center;">Map Game <br> Development Team</name>
+		        </profileHeader>
+			    <profileTab>
+			        <name>Dylan Bulmer</name>
+			        <rank>Lead Programmer</rank>
+			        <twitter>Twitter: <a href="https://twitter.com/piggahbrostudio" target="_BLANK">@PiggahBroStudio</a></twitter>
+		        </profileTab>
+			    <profileTab>
+			        <name>Jon Meserve</name>
+			        <rank>Game Designer</rank>
+		        </profileTab>
+			    <profileTab>
+			        <name>Justin Bulmer</name>
+			        <rank>Game Designer</rank>
+		        </profileTab>
+			    <profileTab>
+			        <name>Spencer Dowd</name>
+			        <rank>Game Designer</rank>
+		        </profileTab>
+			    <profileTab style="border-bottom: 0;">
+			        <name>Tyler Kleiser</name>
+			        <rank>Game Designer</rank>
+			        <twitter>Twitter: <a href="https://twitter.com/SittingDuck1321" target="_BLANK">@SittingDuck1321</a></twitter>
+		        </profileTab>
+            </aside>
+			<main>
+                {% if not session.logged_in %}
+		            <div class='login'>Are you an Official Member? If so, <a href='{{ url_for('login') }}'>login</a>!</div>
+                {% else %}
+                    <a href='{{ url_for('newblog') }}'><div id='create'>&nbsp<i class="ion ion-plus-round"></i>&nbsp&nbspCreate&nbsp</div></a><span style="float: right; line-height: 28px; margin: 0 8px;">Welcome {{ session['name'] }}! <a href="{{ url_for('logout') }}" id="logout">Logout</a></span>
+                {% endif %}
+                <blogContainer>
+			        {{ blogs | safe }}
+			    </blogContainer>
+			</main>
+		</section>
+		<footer>
+            {{ footer | safe }}
+        </footer>
+        <script src='/static/{{ version }}/style.js'></script>
+    </body>
+</html>
