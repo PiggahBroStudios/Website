@@ -435,16 +435,18 @@ class members(db.Model):
         return rv
 
 
-_steam_id_re = re.compile('steamcommunity.com/openid/id/(.*?)$')
+_steam_id_re = re.compile('http://steamcommunity.com/openid/id/(.*?)$')
 
 def get_steam_userinfo(steam_id):
     options = {
-        'key': app.secret_key,
+        'key': STEAM_API_KEY,
         'steamids': steam_id
     }
-    url = 'http://api.steampowered.com/ISteamUser/' \
+    url = 'https://api.steampowered.com/ISteamUser/' \
           'GetPlayerSummaries/v0002/?%s' % urlencode(options)
+    app.logger.error(url)
     rv = json.load(urlopen(url))
+    app.logger.error(rv)
     return rv['response']['players'][0] or {}
 
 @app.before_request
@@ -460,12 +462,14 @@ def gaming_login():
     if g.user is not None:
         return redirect(oid.get_next_url())
     else:
-        return oid.try_login("http://steamcommunity.com/openid")
+        return oid.try_login("https://steamcommunity.com/openid")
 
 @oid.after_login
 def new_forum_user(resp):
     match = _steam_id_re.search(resp.identity_url)
+    app.logger.error(match.group(1))
     g.user = members.get_or_create(match.group(1))
+    app.logger.error(g.user.steam_id)
     steamdata = get_steam_userinfo(g.user.steam_id)
     g.user.nickname = steamdata['personaname']
     g.user.avatar = steamdata['avatarfull']
