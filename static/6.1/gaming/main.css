@@ -121,16 +121,12 @@ side discord title {
 }
 
 side discord members {
-  display: inline-block;
-  width: 115px;
-  font-size: 14px;
-}
-
-side discord members {
+  vertical-align: middle;
   display: inline-block;
   color: #FFFFFF;
   width: 115px;
   font-size: 14px;
+  line-height: 1em;
 }
 
 side discord span {

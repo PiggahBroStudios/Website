@@ -5,11 +5,11 @@ from array import *
 from flaskext.markdown import Markdown
 from flask_sqlalchemy import SQLAlchemy
 from flask_openid import OpenID
-from flask.ext.mysql import MySQL
 from os.path import dirname, join
 from flask_socketio import *
 from urllib.request import urlopen
 from urllib.parse import urlencode
+from werkzeug import generate_password_hash, check_password_hash
 import logging
 
 # Setting up variables
@@ -21,7 +21,6 @@ BLOGS = LOCATION + 'blog.json'
 VERSION = '6.1'
 
 STEAM_API_KEY = CONFIG['steam']['api_key']
-mysql = MySQL()
 
 handler = logging.FileHandler(LOCATION + '/logs/error.log')
 handler.setLevel(logging.ERROR)
@@ -34,18 +33,10 @@ app.config.update(
     SQLALCHEMY_DATABASE_URI = CONFIG['mysql']['full_uri']
 )
 
-app.config['MYSQL_DATABASE_USER'] = CONFIG['mysql']['user']
-app.config['MYSQL_DATABASE_PASSWORD'] = CONFIG['mysql']['password']
-app.config['MYSQL_DATABASE_DB'] = CONFIG['mysql']['schema']
-app.config['MYSQL_DATABASE_HOST'] = CONFIG['mysql']['host']
-
 Markdown(app)
-mysql.init_app(app)
 oid = OpenID(app)
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
-
-mysqldb = mysql.connect()
 
 ####  MAKE SURE TO UPDATE VARIABLES ABOVE IF NECESSARY!  ####
 #### ONLY COPY AND PASTE STUFF BELOW THIS LINE TO SERVER ####
@@ -420,10 +411,13 @@ def logout():
 
 class members(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    steam_id = db.Column(db.String(40))
-    nickname = db.Column(db.String(80))
+    steam_id = db.Column(db.String(50))
+    nickname = db.Column(db.String(32))
     avatar = db.Column(db.String(200))
     realname = db.Column(db.String(100))
+    username = db.Column(db.String(18))
+    password = db.Column(db.String(255))
+    email = db.Column(db.String(100))
 
     @staticmethod
     def get_or_create(steam_id):
@@ -434,18 +428,45 @@ class members(db.Model):
             db.session.add(rv)
         return rv
 
+    @staticmethod
+    def create_user(username, email):
+        test1 = members.query.filter_by(username=username).first()
+        test2 = members.query.filter_by(email=email).first()
+        if test1 is None and test2 is None:
+          rv = None
+        else:
+          rv = test1
+        if rv is None:
+            rv = members()
+            rv.username = username
+            rv.email = email
+            db.session.add(rv)
+        return rv
 
-_steam_id_re = re.compile('http://steamcommunity.com/openid/id/(.*?)$')
+    @staticmethod
+    def get_user(username, password):
+        test = members.query.filter_by(username=username).first()
+        if test is not None:
+          if check_password_hash(test.password, password):
+            test.error = None
+            return test
+          else:
+            return {'error': 'Incorrect username or password!'}
+        else:
+          return {'error': 'User was not found!'}
+
+
+_steam_id_re = re.compile('steamcommunity.com/openid/id/(.*?)$')
 
 def get_steam_userinfo(steam_id):
     options = {
         'key': STEAM_API_KEY,
         'steamids': steam_id
     }
-    url = 'https://api.steampowered.com/ISteamUser/' \
-          'GetPlayerSummaries/v0002/?%s' % urlencode(options)
+    url = 'http://api.steampowered.com/ISteamUser/' \
+          'GetPlayerSummaries/v0001/?%s' % urlencode(options)
     rv = json.load(urlopen(url))
-    return rv['response']['players'][0] or {}
+    return rv['response']['players']['player'][0] or {}
 
 @app.before_request
 def before_request():
@@ -453,20 +474,61 @@ def before_request():
     if 'user_id' in session:
         g.user = members.query.filter_by(id=session['user_id']).first()
 
-@app.route("/gaming/login")
-@app.route("/gaming/login/")
-@oid.loginhandler
+@app.route("/gaming/login", methods=['GET', 'POST'])
+@app.route("/gaming/login/", methods=['GET', 'POST'])
 def gaming_login():
+  if request.method == 'POST':
+    if request.form['type'] == "login":
+      # Basic testing for username/password combo
+      _password = request.form['password']
+      _username = request.form['username']
+      g.user = members.get_user(_username,_password)
+      if 'error' in g.user:
+        return render_template('gaming/login.html', error=g.user['error'], version=VERSION)
+      else:
+        session['user_id'] = g.user.id
+        return redirect(url_for('gaming_forums'))
+    elif request.form['type'] == "signup":
+      # set variables
+      _pass1 = request.form['password']
+      _pass2 = request.form['password2']
+      _username = request.form['username']
+      _email = request.form['email']
+      _name = request.form['realname']
+      # Test if passwords match
+      if _pass1 != _pass2:
+        return render_template('gaming/login.html', error='Passwords do not match', version=VERSION)
+      else:
+        _password = generate_password_hash(_pass1)
+        g.user = members.create_user(_username,_email)
+        g.user.nickname = _username
+        g.user.password = _password
+        g.user.realname = _name
+        db.session.commit()
+        session['user_id'] = g.user.id
+        return redirect(url_for('gaming_forums'))
+    else:
+      return render_template('gaming/login.html', error='Unexpected Error', version=VERSION)
+  else:
+    if g.user is not None:
+        return redirect(url_for('gaming_forums'))
+    else:
+        return render_template('gaming/login.html', error='', version=VERSION)
+
+@app.route("/gaming/login/steam")
+@app.route("/gaming/login/steam/")
+@oid.loginhandler
+def gaming_login_steam():
     if g.user is not None:
         return redirect(oid.get_next_url())
     else:
-        return oid.try_login("https://steamcommunity.com/openid")
+        return oid.try_login("http://steamcommunity.com/openid")
 
 @oid.after_login
-def new_forum_user(resp):
+def update_forum_user(resp):
     match = _steam_id_re.search(resp.identity_url)
     g.user = members.get_or_create(match.group(1))
-    steamdata = get_steam_userinfo(g.user.steam_id)
+    steamdata = get_steam_userinfo(g.user.steam_id) ## Break Point
     g.user.nickname = steamdata['personaname']
     g.user.avatar = steamdata['avatarfull']
     g.user.realname = steamdata['realname']
