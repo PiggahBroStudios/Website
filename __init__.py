@@ -588,8 +588,11 @@ def github_payload():
       log.write("Received JSON: "+json.dumps(data))
       log.close()
     github.log("Received package created at "+data['head_commit']['timestamp'])
-    github.pull()
-    return "Received package created at "+data['head_commit']['timestamp']
+    pull = github.pull()
+    if pull == True:
+      return "Received package created at "+data['head_commit']['timestamp']
+    else: 
+      return "Failed to pull package!" 
   else:
     return "Package Aborted: Received data was not a commit"
   
