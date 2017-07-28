@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+body {
+    background: linear-gradient(141deg, #3BF, #0AF) no-repeat;
+    height: 100vh;
+}
+
+main {
+    text-align: center;
+}
+
+form {
+    display: inline-block;
+    background-color: #FFF;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 25px;
+    min-width: 200px;
+    max-width: 400px;
+    width: 50%;
+    display: inline-block;
+}
+
+input {
+    padding: 5px;
+    border-bottom: 2px solid #777;
+    width: calc(100% - 10px);
+}
+
+h1 {
+    text-align: left;
+    color: #777;
+}
+
+#col1 {
+    width: 40%;
+    text-align: left;
+}
+
+#col2 {
+    width: 60%;
+}
+
+#col2 input {
+    text-align: left;
+}
+
+table {
+    width: 100%;
+    text-align: left;
+}
+
+@media  only screen and (max-width: 640px) {
+    form { width: calc(100% - 70px) }
+}

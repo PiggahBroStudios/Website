@@ -1,0 +1,49 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    text-align: center;
+}
+
+body {
+    background: linear-gradient(141deg, #3BF, #0AF) no-repeat;
+    height: 100vh;
+}
+
+form {
+    display: inline-block;
+    background-color: #FFF;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 50px;
+    min-width: 400px;
+    width: 25%;
+}
+
+input {
+    padding: 5px;
+    border-bottom: 2px solid #777;
+    width: calc(100% - 10px);
+}
+
+h1 {
+    text-align: left;
+    color: #777;
+}
+
+#col1 {
+    width: 25%;
+    text-align: left;
+}
+
+#col2 {
+    width: 75%;
+}
+
+#col2 input {
+    text-align: left;
+}
+
+table {
+    width: 100%;
+}

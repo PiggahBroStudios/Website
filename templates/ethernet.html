@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+    <head>
+        <title>Ethernet | Piggah Bro Studios</title>
+		<link rel='stylesheet' href='/static/{{ version }}/main.css'/>
+		<link rel='stylesheet' href='/static/css/ionicons.min.css'/>
+		<link rel="icon" type="image/png" href="/static/image/logo.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="We now sell Cat6 Ethernet Cables! Custom made to any length up to 100 feet!">
+		<meta name="keywords" content="Dylan,Bulmer,Piggah,Bro,Studios,Game,Web,Development,Mod Packs">
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Product",
+      "name": "Custom Length Ethernet Cable",
+      "image": "http://structuredcabling.com/wp-content/uploads/2015/05/ethernet-cable.jpg",
+      "offers": {
+        "@type": "AggregateOffer",
+        "lowPrice": "2.54",
+        "highPrice": "29.00",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+		<meta name="author" content="Dylan Bulmer">
+        <style>
+        .container {
+            vertical-align: middle;
+        }
+        .out, .in {
+            padding: 5px;
+            background: white;
+            display: inline-block;
+            border-radius: 5px;
+        }
+        </style>
+    </head>
+    <body>
+		<nav style="border-top: 0;">
+		    {{ nav | safe }}
+		</nav>
+		<section>
+			<main class="full-page">
+			    <h1>Our Ethernet Products</h1><br><br>
+                <div class="container">
+                    <div class="item title"><h3>Our Pricing</h3></div>
+                    <div class="item"><p>I, Dylan Bulmer, make these ethernet cables for cheap! I am selling each CAT 6, 1 Gigabit speed ethernet cable for $0.27 per foot, plus $2.00 per cable for my labor. Use the price calculator below to find out the final cost of your cable!</p></div>
+                </div>
+                <div class="container">
+			        <form oninput="
+    var p = {};
+    if(parseInt(a.value) > 100){a.value = 100}
+    else if (parseInt(a.value) < 2) {a.value = 2}
+    p.cost=''+((parseInt(a.value)*(0.09*3))+2);
+    p.nums=p.cost.split('.');
+    if(p.nums[1]&&p.nums[1].length>=2){
+        p.nums[1]=p.nums[1].slice(0,2);
+    } else if (p.nums[1] && p.nums[1].length <=1){
+        p.nums[1] = ''+p.nums[1]+0;
+    } else { p.nums[1]='00'} 
+    x.value='$'+p.nums[0]+'.'+p.nums[1];">
+			        <table style="width: calc(100% - 40px); margin: auto; padding: 5px 0; text-align: center; background-color: #ddd; border-radius: 5px">
+	                    <tr>
+                        	<td style="width: 33%">Price out YOUR cable!</td>
+                        	<td style="width: 33%">
+                        	    <span class="in">
+                        	        <input type="number" name="a" value="10" min="2"max="100"> feet
+                        	    </span>
+                    	    </td>
+                        	<td style="width: 33%">
+                        	    <span class="out">
+                        	    Final Price:<br>
+                        	    <output name="x">$4.70</output>
+                        	    </span>
+                	        </td>
+                        </tr>
+                    </table>
+                    </form>
+                </div>
+                <div class="container">
+                    <div class="item title"><h3>Are You Eligible?</h3></div>
+                    <div class="item"><p>This product is only for the locals! If you don't know me personally or don't know a supplier of mine, you won't be able to get this product because I do not ship.</p></div>
+                </div>
+                <div class="container">
+                    <div class="item title"><h3>Keep in mind...</h3></div>
+                    <div class="item"><p>When ordering, remember to add in a slack value, if you order your cable the exact length you need it, there is a high possibility it will not be long enough. You should add slack room whenever your cable goes around corners or take any turns.</p></div>
+                </div>
+                <div class="container">
+                    <div class="item title"><h3>Return Policy</h3></div>
+                    <div class="item"><p>To receive a full refund, the cable must be in working condition and it must be returned within 30 days of your purchase.</p></div>
+                </div>
+			</main>
+		</section>
+		<footer>
+		    {{ footer | safe }}
+	    </footer>
+        <script src='/static/{{ version }}/style.js'></script>
+    </body>
+</html>

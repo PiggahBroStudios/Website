@@ -1,0 +1,25 @@
+<!--<span style="display: block;min-height: 200px;line-height: 2em;"><img src="/static/image/fromScratch.png" width="200" style="float:left;"></img>--><div class=".container"><!--</span>-->
+
+<h1>Web Development</h1><br><br>
+
+<div class="container">
+    <div class="item title"><h3>About This Service:</h3></div>
+    <div class="item"><p>At Piggah Bro Studios, we make every website from scratch. To do this, we bring out the drawing board and draw out your website to your liking, then we will make it digital! From here you have to power to ask for adjustments and any restyling you want. We want you to be happy with your new website!</p></div>
+</div>
+
+<div class="container">
+    <div class="item title"><h3>Mobile Compatibility</h3></div>
+    <div class="item"><p>We make your website 100% mobile friendly for no extra charge! We understand that mobile compatibiliy is a must and we will make sure everything works on all smartphones and tablets!</p></div>
+</div>
+
+<div class="container">
+    <div class="item title"><h3>Our pricing</h3></div>
+    <div class="item"><p>For a full, muiltiple page website we charge $20 per page plus an extra $10 per page for self-maintenance. For any page that requires a database including blogs, forms, etc. you will need to pay an extra $5 for each database.<br><br><em>Use our online price calculator <a href="/services/web/calc">here</a>!</em></p></div>
+</div>
+
+<span style="display: block;line-height: 2em;"><br>
+    <b>Websites Made By Us:</b>
+    <div style='width: 100%; white-space: nowrap; overflow-x: auto; overflow-y: hidden;line-height:1.25em'>
+        <a href="http://lrtcit.info" style="display: block; width: 100px; height: 34px; border-radius: 5px; margin: 10px; text-decoration: none; background: linear-gradient(141deg, #2BADE2, #2B0FE0) no-repeat; text-align: center; padding: 34px 0; color: #FFF;" target="_BLANK">LRTC IT<br>Website</a>
+    </div>
+</span>

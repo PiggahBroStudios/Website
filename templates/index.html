@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+    <head>
+        <title>Piggah Bro Studios</title>
+		<link rel='stylesheet' href='/static/{{ version }}/main.css'/>
+		<link rel='stylesheet' href='/static/css/ionicons.min.css'/>
+		<meta name="google-site-verification" content="OCChJWUlPczUG61AbvgQ_4io0zO3QF5oUXZ3Bon-Sjw" />
+		<script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+        "founder": "Dylan Bulmer",
+        "name": "Piggah Bro Studios",
+      "url": "https://piggahbro.ddns.net",
+      "logo": "https://piggahbro.ddns.net/static/image/logo2.png"
+    }
+    </script>
+		<link rel="icon" type="image/png" href="/static/image/logo.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Piggah Bro Studios is run by Dylan Bulmer. He has created games including Feline Fighters and The Map Game. Many more games are expected to come! He also does Web Development on the side for a reasonable price!">
+		<meta name="keywords" content="Dylan,Bulmer,Piggah,Bro,Studios,Game,Web,Development,Mod Packs">
+		<meta name="author" content="Dylan Bulmer">
+		<style>
+		    .login-info {
+		        padding: 3px;
+		        position: fixed;
+		        top: 10px;
+		        right: 10px;
+		        border-radius: 3px;
+		        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+                background: rgba(255, 255, 255, 0.02);
+		    }
+		</style>
+    </head>
+    <body>
+		<div class="header"><h2 style="padding: 42.5px 0 8px 0">Piggah Bro Studios</h2>Website and Game<br>Development Studios</div>
+		{% if session['log']['fail'] == True %}
+		    {% if session['log']['show'] != 0 %}
+		        <div class="login-info" style="color: #a00">You were not logged in!</div>
+            {% endif %}
+	    {% else %}
+		    {% if session['log']['show'] != 0 %}
+	            <div class="login-info" style="color: #0a0">Welcome back, {{ session['userinfo']['given_name'] }}!</div>
+            {% endif %}
+	    {% endif %}
+		<nav>
+		    {{ nav | safe }}
+		</nav>
+		<section>
+			<aside class='twitter'><a class="twitter-timeline" data-dnt="true" href="https://twitter.com/PiggahBro" data-widget-id="717426157537386496">Tweets by @PiggahBro</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      </aside>
+			<main>
+			  {{ message | markdown }}
+		  </main>
+			<aside class="twitter" style="margin: 10px 15px 10px 5px">
+			  <iframe src="https://discordapp.com/widget?id=236255792737681408&theme=dark" width='250' height="404" allowtransparency="true" frameborder="0"></iframe>
+      </aside>
+		</section>
+		<footer>
+		    {{ footer | safe }}
+	    </footer>
+        <script src='/static/{{ version }}/style.js'></script>
+    </body>
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>https://piggahbro.ddns.net/</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/blog</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/products</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/services</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/services/web</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/services/game</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/login</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/blog/4</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/blog/3</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/blog/2</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/blog/0</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/products/MapGame</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/products/FelineFighters</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/products/ethernet</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/products/piggah-bros-tech-pack</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://piggahbro.ddns.net/services/web/calc</loc>
+  <lastmod>2017-06-24T20:15:35+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+</urlset>

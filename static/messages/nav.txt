@@ -1,0 +1,13 @@
+<ul>
+  <li><a class="active" href="/">Home</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="/products">Products</a></li>
+  <li class="dropdown">
+    <a href="/services" class="dropbtn">Services</a>
+    <div class="dropdown-content">
+      <a href="/services/web">Web Development</a>
+      <a href="/services/game">Game Development</a>
+<!--      <a href="/services/Technical-Support">Technical Support</a> -->
+    </div>
+  </li>
+</ul>

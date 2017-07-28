@@ -1,0 +1,40 @@
+{
+    "main": [
+        {
+            "title": "The Story Behind The Game:",
+            "text": "This game was started by Jon Meserve as a chat based game using iMessage / Skype with very limited visual on who has what land and what land was avalible. To solve this problem, we decided it was a good idea to make this game into a real thing. Dylan Bulmer, lead programmer for this game, started developing the game right away and throughout the process others including: Tyler Kleiser and Spencer Dowd helped debug and suggest details and improvements to be added. With hard work and some outside help the game is close to finished."
+        }
+    ],
+    "details": [
+        {
+            "detail": "Published",
+            "datatype": "string",
+            "value": "Under Delevopment"
+        },
+        {
+            "detail": "Version",
+            "datatype": "number",
+            "value": 0
+        },
+        {
+            "detail": "Features",
+            "datatype": "array",
+            "value": [
+                "Server Creation",
+                "Login/Logout of Servers",
+                "Edit and Save Map",
+                "Global Chat"
+            ]
+        },
+        {
+            "detail": "Developers",
+            "dataype": "array",
+            "value": [
+                "Dylan Bulmer",
+                "Jon Meserve",
+                "Tyler Kleiser",
+                "Spencer Dowd"
+            ]
+        }
+    ]
+}

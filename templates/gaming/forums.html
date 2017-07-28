@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <title>Community Forums</title>
+    <link rel="stylesheet" href="/static/{{ version }}/gaming/main.css"/>
+  </head>
+  <body>
+    <header style="width: calc(100% - 250px);margin: 0;">
+      <h2 style="padding: 42.5px 0 8px 0;">
+        Piggah Bro Studios
+      </h2>
+      Community Forums
+      <main style="font-size: 0.6em; width: 50%; margin: auto;">
+        <section>
+          <collums>
+            <collum>
+              <a href="/gaming">
+                Home
+              </a>
+            </collum>
+            <collum>
+              <a href="/gaming/forums">
+                Forums
+              </a>
+            </collum>
+            <collum>
+              <a href="http://steamcommunity.com/groups/piggahbrostudios" target="_BLANK">
+                Steam Group
+              </a>
+            </collum>
+            {% if g.user %}
+            <collum>
+              <a href="/gaming/logout">
+                Logout
+              </a>
+            </collum>
+            {% else %}
+            <collum>
+              <a href="/gaming/login">
+                Login / Signup
+              </a>
+            </collum>
+            {% endif %}
+          </collums>
+        </section>
+      </main>
+      <logo></logo>
+    </header>
+    <side>
+      <discord>
+        <title>Discord</title>
+        <members><b id="om">0</b> Members Online</members>
+        <span>
+          Join Us!
+          <a href="https://discord.gg/A2db8se" target="_BLANK">
+            Connect
+          </a>
+        </span>
+      </discord>
+    </side>
+    <script>
+    function getDiscord(callback) {
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          return callback(JSON.parse(this.responseText));
+        }
+      };
+      xhttp.open("GET", "https://discordapp.com/api/guilds/236255792737681408/widget.json", true);
+      xhttp.send();
+    }
+    
+    getDiscord(function(data){
+      document.getElementById('om').innerText = data.members.length
+    })
+    setInterval(function(){
+      getDiscord(function(data){
+        document.getElementById('om').innerText = data.members.length
+      })
+    }, 10000);
+    </script>
+  </body>
+</html>
