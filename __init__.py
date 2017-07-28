@@ -3,8 +3,8 @@ import os, sys, json, time, requests, uuid, re, datetime
 from flask import *
 from array import *
 from flaskext.markdown import Markdown
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.openid import OpenID
+from flask_sqlalchemy import SQLAlchemy
+from flask_openid import OpenID
 from os.path import dirname, join
 from urllib.request import urlopen
 from urllib.parse import urlencode
@@ -13,8 +13,12 @@ from werkzeug import generate_password_hash, check_password_hash
 import logging
 
 # Setting up variables
+
+app = Flask(__name__)
+
 import config #custom module for security reasons
-CONFIG = config.get_config()
+
+CONFIG = config.get_config(app)
 LOCATION = CONFIG['app']['location']
 SECRETS = CONFIG['web']
 STATIC = LOCATION + 'static/'
@@ -29,14 +33,11 @@ STEAM_API_KEY = CONFIG['steam']['api_key']
 handler = logging.FileHandler(LOCATION + '/logs/error.log')
 handler.setLevel(logging.ERROR)
 
-app = Flask(__name__)
-
 app.logger.addHandler(handler)
 
 app.config.update(
     SQLALCHEMY_DATABASE_URI = CONFIG['mysql']['full_uri']
 )
-app.secret_key = str(uuid.uuid4())
 
 Markdown(app)
 oid = OpenID(app)
@@ -580,11 +581,13 @@ def gaming_forums():
 @app.route('/push', methods=['POST'])
 def github_payload():
   data = request.get_json()
-  app.logger.error(data)
-  with open(LOCATION + "logs/github/"+data["created_at"]+".log", 'w') as log:
-    log.write("Received JSON: "+json.dumps(data))
-    log.close()
-  return "Received package created at "+data['created_at']
+  if "head_commit" in data:
+    with open(LOCATION + "logs/github/"+data['head_commit']['timestamp']+".log", 'w') as log:
+      log.write("Received JSON: "+json.dumps(data))
+      log.close()
+    return "Received package created at "+data['head_commit']['timestamp']
+  else:
+    return "Package Aborted: Received data was not a commit"
   
 #### ONLY COPY AND PASTE STUFF ABOVE THIS LINE TO SERVER ####
 
