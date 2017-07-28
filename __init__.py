@@ -16,9 +16,11 @@ import logging
 
 app = Flask(__name__)
 
-import config #custom module for security reasons
+from settings import config, github #custom module for security reasons
 
 CONFIG = config.get_config(app)
+github.setup(CONFIG)
+
 LOCATION = CONFIG['app']['location']
 SECRETS = CONFIG['web']
 STATIC = LOCATION + 'static/'
@@ -585,6 +587,8 @@ def github_payload():
     with open(LOCATION + "logs/github/"+data['head_commit']['timestamp']+".log", 'w') as log:
       log.write("Received JSON: "+json.dumps(data))
       log.close()
+    github.log("Received package created at "+data['head_commit']['timestamp'])
+    githon.pull()
     return "Received package created at "+data['head_commit']['timestamp']
   else:
     return "Package Aborted: Received data was not a commit"
