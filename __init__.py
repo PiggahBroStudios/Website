@@ -588,7 +588,7 @@ def github_payload():
       log.write("Received JSON: "+json.dumps(data))
       log.close()
     github.log("Received package created at "+data['head_commit']['timestamp'])
-    githon.pull()
+    github.pull()
     return "Received package created at "+data['head_commit']['timestamp']
   else:
     return "Package Aborted: Received data was not a commit"
