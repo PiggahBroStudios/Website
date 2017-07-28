@@ -13,15 +13,16 @@ from werkzeug import generate_password_hash, check_password_hash
 import logging
 
 # Setting up variables
-LOCATION = '/home/dylan/Desktop/Servers/PBS/'
-CONFIG = json.loads(open(LOCATION + 'client_secrets.json', 'r').read())
+import config #custom module for security reasons
+CONFIG = config.get_config()
+LOCATION = CONFIG['app']['location']
 SECRETS = CONFIG['web']
 STATIC = LOCATION + 'static/'
 BLOGS = LOCATION + 'blog.json'
-VERSION = 'dev'
-HOST = 'localhost'
-DEBUG = True
-PORT = 80
+VERSION = CONFIG['app']['version']
+HOST = CONFIG['app']['host']
+DEBUG = CONFIG['app']['debug']
+PORT = CONFIG['app']['port']
 
 STEAM_API_KEY = CONFIG['steam']['api_key']
 
