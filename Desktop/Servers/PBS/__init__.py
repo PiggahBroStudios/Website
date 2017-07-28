@@ -3,12 +3,12 @@ import os, sys, json, time, requests, uuid, re, datetime
 from flask import *
 from array import *
 from flaskext.markdown import Markdown
-from flask_sqlalchemy import SQLAlchemy
-from flask_openid import OpenID
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.openid import OpenID
 from os.path import dirname, join
-from flask_socketio import *
 from urllib.request import urlopen
 from urllib.parse import urlencode
+from flask_socketio import *
 from werkzeug import generate_password_hash, check_password_hash
 import logging
 
@@ -424,7 +424,10 @@ class members(db.Model):
     realname = db.Column(db.String(100))
     username = db.Column(db.String(18))
     password = db.Column(db.String(255))
+    posts = db.Column(db.String(5))
     email = db.Column(db.String(100))
+    joined = db.Column(db.String(20))
+    error = None
 
     @staticmethod
     def get_or_create(steam_id):
@@ -437,30 +440,33 @@ class members(db.Model):
 
     @staticmethod
     def create_user(username, email):
+        test = members()
         test1 = members.query.filter_by(username=username).first()
         test2 = members.query.filter_by(email=email).first()
-        if test1 is None and test2 is None:
-          rv = None
-        else:
-          rv = test1
-        if rv is None:
-            rv = members()
-            rv.username = username
-            rv.email = email
-            db.session.add(rv)
-        return rv
+        if test1 is not None:
+          test.error = "Username has been taken!"
+        elif test2 is not None:
+          test.error = "Email has been taken!"
+        if test.error == None:
+            test = members()
+            test.username = username
+            test.posts = 0
+            test.email = email
+            db.session.add(test)
+        return test
 
     @staticmethod
     def get_user(username, password):
         test = members.query.filter_by(username=username).first()
         if test is not None:
           if check_password_hash(test.password, password):
-            test.error = None
             return test
           else:
-            return {'error': 'Incorrect username or password!'}
+            test.error = 'Incorrect username or password!'
+            return test
         else:
-          return {'error': 'User was not found!'}
+          test.error = 'User was not found!'
+          return test
 
 
 _steam_id_re = re.compile('steamcommunity.com/openid/id/(.*?)$')
@@ -490,8 +496,8 @@ def gaming_login():
       _password = request.form['password']
       _username = request.form['username']
       g.user = members.get_user(_username,_password)
-      if 'error' in g.user:
-        return render_template('gaming/login.html', error=g.user['error'], version=VERSION)
+      if g.user.error:
+        return render_template('gaming/login.html', error=g.user.error, version=VERSION)
       else:
         session['user_id'] = g.user.id
         return redirect(url_for('gaming_forums'))
@@ -508,12 +514,15 @@ def gaming_login():
       else:
         _password = generate_password_hash(_pass1)
         g.user = members.create_user(_username,_email)
-        g.user.nickname = _username
-        g.user.password = _password
-        g.user.realname = _name
-        db.session.commit()
-        session['user_id'] = g.user.id
-        return redirect(url_for('gaming_forums'))
+        if g.user.error is not None:
+          return render_template('gaming/login.html', error=g.user.error, version=VERSION)
+        else:
+          g.user.nickname = _username
+          g.user.password = _password
+          g.user.realname = _name
+          db.session.commit()
+          session['user_id'] = g.user.id
+          return redirect(url_for('gaming_forums'))
     else:
       return render_template('gaming/login.html', error='Unexpected Error', version=VERSION)
   else:
@@ -557,6 +566,15 @@ def gaming():
 @app.route('/gaming/forums')
 @app.route('/gaming/forums/')
 def gaming_forums():
+  if g.user:
+    _name = Markup.escape(g.user.nickname)
+    _posts = Markup.escape(g.user.posts)
+    _format_before = "%Y-%m-%d %H:%M:%S"
+    _format_after = "%b %d, %Y %w:%y %p"
+    _joined = datetime.datetime.strptime(str(g.user.joined), _format_before).strftime(_format_after)
+    return render_template('gaming/forums.html',\
+            name=_name,posts=_posts,joined=_joined,version=VERSION)
+  else:
     return render_template('gaming/forums.html', version=VERSION)
     
 ## Github Payload Management
