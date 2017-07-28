@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+    <head>
+        <title>Chat | Piggah Bro Studios</title>
+		<link rel='stylesheet' href='static/{{ version }}/chat.css'/>
+		<link rel="icon" type="image/png" href="static/image/logo.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Dylan Bulmer">
+    </head>
+    <body>
+        <main>
+            <table style="border-collapse: collapse;">
+                <tr style="postion: sticky;"><th id='time'>Time</th><th id='name'>Name</th><th id='msg'>Message</th></tr>
+            </table>
+            <table style="border-collapse: collapse;">
+                <tbody id="room">
+                    {{ chat | markdown }}
+                </tbody>
+            </table>
+        </main>
+	    <bottom>
+            <div id='msg'>
+                <input type='text' name='msg' placeholder="Type message here!" autocomplete="off" autofocus id="chat-msg">
+            </div>
+	    </bottom>
+		<script src="/static/{{ version }}/socket.io.min.js"></script>
+		<script src="/static/{{ version }}/showdown.min.js"></script>
+	    <script>
+	        let markdown = new showdown.Converter()
+            var chatlog = document.getElementById('room');
+	        let chat = io.connect(window.location.origin + '/chat');
+            chat.on('connect', function() {
+                chat.emit('joined');
+                msg.addEventListener('keydown', function(e) {
+                    var code = e.keyCode || e.which;
+                    if (code == 13) {
+                        if ( msg.value != "" ) {
+                            e.preventDefault();
+                            if (msg.value == "/logout"){
+                                chat.emit('message', JSON.stringify({msg: msg.value}));
+                                window.location = "/chat/logout"
+                            } else {
+                                console.log('Sending message to server!')
+                                chat.emit('message', JSON.stringify({msg: msg.value}));
+                                msg.value = "";
+                            }
+                        }
+                    }
+                });
+            });
+            chat.on('status', function(data) {
+                console.log('Recieved: ', data)
+                chatlog.innerHTML = markdown.makeHtml( data.msg ) + chatlog.innerHTML;
+            });
+            chat.on('message', function(data) {
+                console.log('Recieved: ', data)
+                chatlog.innerHTML = markdown.makeHtml( data.msg ) + chatlog.innerHTML;
+            });
+            let msg = document.getElementById('chat-msg');
+	    </script>
+    </body>
+</html>

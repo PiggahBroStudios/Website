@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+    <head>
+        <title>Blog | Piggah Bro Studios</title>
+		<link rel='stylesheet' href='/static/{{ version }}/main.css'/>
+		<link rel='stylesheet' href='/static/css/ionicons.min.css'/>
+		<link rel="icon" type="image/png" href="/static/image/logo.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="This page displays all of the blogs by people working at Piggah Bro Studios">
+		<meta name="author" content="Dylan Bulmer">
+    </head>
+    <body>
+		<nav style="border-top: 0;">
+		    {{ nav | safe }}
+		</nav>
+		<section>
+			<main>
+			    <form action="" method="post">
+			        <input name='title' style='font-size:1.5em;font-weight:bold;width:100%' placeholder="Title Here..." autocomplete='off'><br>
+			        <span style="display: block;color: #777;font-size: 0.75em;font-weight: bold">{{ session['name'] }} | {{ date }}</span>
+			        <hr>
+			        <textarea name='body' rows=20 style='max-width:100%;min-width:100%;width:100%;font-size:1em;line-height:1.5em;' placeholder='Add your markdown blog here'></textarea>
+			        <input type='submit' value='Post!' id='create'>
+			        <span style='float:right;'>Need help with markdown? Click <a href='http://daringfireball.net/projects/markdown/basics' target="_BLANK">here</a>!</span>
+		        </form>
+			</main>
+		</section>
+		<footer>
+            {{ footer | safe }}
+        </footer>
+        <script src='/static/{{ version }}/style.js'></script>
+    </body>
+</html>
