@@ -147,3 +147,22 @@ side discord span a {
   width: 120px;
   height: 30px;
 }
+
+side member {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 10px;
+  background: #171a1c;
+  color: #eeeeee;
+}
+
+side member name {
+  display: block;
+  width: 100%;
+}
+
+side member settings, side member posts, side member joined {
+  display: block;
+  width: 100%;
+  font-size: 0.8em;
+}

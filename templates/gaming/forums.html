@@ -56,6 +56,19 @@
           </a>
         </span>
       </discord>
+      {% if g.user %}
+      <member>
+        <name>Welcome, {{ name | safe }}!</name>
+        <joined style="margin-bottom:1em;">Joined on {{ joined | safe }}</joined>
+        <posts>posts: {{ posts | safe }}</posts>
+        <settings><a>Account Settings</a></settings>
+      </member>
+      {% else %}
+      <member style="text-align: center; padding: 20px 10px;">
+        <b>Join the community Today!</b><br><br>
+        <h6>Just Click "Sign in through Steam"<br>and You're Done!</h6>
+      </member>
+      {% endif %}
     </side>
     <script>
     function getDiscord(callback) {
