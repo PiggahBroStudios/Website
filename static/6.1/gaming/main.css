@@ -110,13 +110,15 @@ side discord {
   color: #FFFFFF;
   line-height: 2em;
   background-color: #738bd7;
+  text-align: center;
 }
 
 side discord title {
   display: inline-block;
-  width: 100px;
+  width: calc(50% - 3px);
   font-size: 1.3em;
   font-weight: bold;
+  text-align: center;
   vertical-align: middle;
 }
 
@@ -124,7 +126,8 @@ side discord members {
   vertical-align: middle;
   display: inline-block;
   color: #FFFFFF;
-  width: 115px;
+  text-align: right;
+  width: calc(50% - 3px);
   font-size: 14px;
   line-height: 1em;
 }
@@ -133,6 +136,7 @@ side discord span {
   width: 100%;
   display: block;
   text-align: center;
+  margin-top: 5px;
 }
 
 side discord span a {
@@ -144,7 +148,7 @@ side discord span a {
   border-radius: 4px;
   font-size: 14px;
   color: #FFFFFF;
-  width: 120px;
+  width: calc(50% - 3px);
   height: 30px;
 }
 
@@ -165,4 +169,66 @@ side member settings, side member posts, side member joined {
   display: block;
   width: 100%;
   font-size: 0.8em;
+}
+
+topics {
+  display: block;
+  width: calc(90% - 250px);
+  margin: calc(5% - 10px) 5%;
+  color: #ffffff;
+}
+
+topics a {  
+  color: #ffffff;
+  text-decoration: none;
+}
+
+topics a:hover {
+  text-decoration: underline;
+}
+
+topic {
+  background-color: #222628;
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+topic>name {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 10px;
+  background-color: #00aaff;
+  font-weight: bold;
+}
+
+topic forum {
+  display: block;
+  width: calc(100% - 30px);
+  padding: 10px 15px;
+}
+
+topic forum name {
+  display: block;
+  width: 100%;
+}
+
+topic forum>thread {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 5px 10px;
+}
+
+forum thread name {
+  display: block;
+  width: 100%;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+forum thread>author,topic thread>date {
+  display: inline-block;
+  font-size: 12px;
 }
