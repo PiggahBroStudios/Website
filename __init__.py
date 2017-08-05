@@ -578,7 +578,6 @@ def update_forum_user(resp):
     if g.user.nickname == None:
       g.user.nickname = steamdata['personaname']
       g.user.avatar = steamdata['avatarfull']
-      app.logger.error(steamdata['realname'])
       if 'realname' in steamdata:
         g.user.realname = steamdata['realname']
     db.session.commit()
