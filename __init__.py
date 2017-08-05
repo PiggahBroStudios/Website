@@ -423,7 +423,7 @@ class members(db.Model):
     realname = db.Column(db.String(100))
     username = db.Column(db.String(18))
     password = db.Column(db.String(255))
-    posts = db.Column(db.String(5))
+    posts = db.Column(db.String(10))
     email = db.Column(db.String(100))
     joined = db.Column(db.String(20))
     error = None
@@ -601,7 +601,7 @@ def gaming_account():
   if g.user:
     _name = Markup.escape(g.user.nickname)
     _format_before = "%Y-%m-%d %H:%M:%S"
-    _format_after = "%b %d, %Y %w:%y %p"
+    _format_after = "%b %d, %Y %-I:%M %p"
     _avatar = g.user.avatar
     _joined = datetime.datetime.strptime(str(g.user.joined), _format_before).strftime(_format_after)
     return render_template('gaming/account.html',\
@@ -617,7 +617,7 @@ def gaming_forums():
     _name = Markup.escape(g.user.nickname)
     _posts = Markup.escape(g.user.posts)
     _format_before = "%Y-%m-%d %H:%M:%S"
-    _format_after = "%b %d, %Y %w:%y %p"
+    _format_after = "%b %d, %Y %-I:%M %p"
     _joined = datetime.datetime.strptime(str(g.user.joined), _format_before).strftime(_format_after)
     return render_template('gaming/forums.html',\
             name=_name,posts=_posts,joined=_joined,\
