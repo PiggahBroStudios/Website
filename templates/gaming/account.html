@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Community Forums</title>
+    <link rel="stylesheet" href="/static/{{ version }}/gaming/main.css"/>
+  </head>
+  <body>
+    <header>
+      <h2>Piggah Bro Studios</h2>
+      {{ name | safe }}'s Account Settings
+      <logo></logo>
+    </header>
+    <side class="account">
+      <tab id="gen" class="show" onclick="viewPage('gen')">General</tab>
+      {% if g.user.username != None %}
+      <tab id="mln" onclick="viewPage('mln')">Manage Login</tab>
+      {% else %}
+      <tab id="cln" onclick="viewPage('cln')">Create Login</tab>
+      {% endif %}
+    </side>
+    <content id="_gen">
+      <id>
+        <avatar style="background-image:url({{ img }});"></avatar>
+        <span style="display: inline-block">
+          <name>Hello {{ name | safe }}!</name><br>
+          <joined>Joined {{ joined }}</joined>
+        <span>
+      </id>
+    </content>
+    <content id="_mln">
+      <h2>Manage Login</h2>
+    </content>
+    <content id="_cln">
+      <h2>Create Login</h2>
+    </content>
+    <script>
+      var cbtn = document.getElementById('gen')
+      var cpg = document.getElementById('_gen')
+      
+      cpg.setAttribute('style', 'display: block;')
+      
+      var viewPage = function(pg) {
+        let nbtn = document.getElementById(pg)
+        let npg = document.getElementById("_"+pg)
+        cpg.setAttribute('style', 'display: none;')
+        npg.setAttribute('style', 'display: block;')
+        cbtn.setAttribute('class', '')
+        nbtn.setAttribute('class', 'show')
+        
+        cbtn = nbtn
+        cpg = npg
+      }
+    </script>
+  </body>
+</html>

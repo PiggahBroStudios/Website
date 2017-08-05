@@ -5,7 +5,7 @@
 }
 
 body {
-  background: url("../../image/background.png");
+  background: url("../../image/background.png") no-repeat fixed center;
 }
 
 header {
@@ -19,6 +19,14 @@ header {
   color: white;
   font-size: 1.5em;
   text-align: center;
+  box-shadow: -1px 2px 4px 0 rgba(0,0,0,0.16),-1px 2px 10px 0 rgba(0,0,0,0.12)!important;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+header h2 {
+  padding: 42.5px 0 8px 0;
 }
 
 logo {
@@ -101,6 +109,58 @@ side {
   right: 0;
   top: 0;
   background-color: #222628;
+  box-shadow: -2px 0 2px 0 rgba(0,0,0,0.16),-2px 0 10px 0 rgba(0,0,0,0.16)!important;
+}
+
+side.account {
+  width: 250px;
+  height: calc(100vh - 200px);
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 200px;
+  background-color: #222628;
+  z-index: 2;
+  box-shadow: 2px 1px 2px 0 rgba(0,0,0,0.16),2px 10px 10px 0 rgba(0,0,0,0.16)!important;
+}
+
+side.account tab {
+  width: calc(100% - 20px);
+  height: 24px;
+  display: block;
+  padding: 10px;
+  line-height: 24px;
+  text-align: center;
+  font-weight: bold;
+  color: #ffffff;
+  font-variant: SMALL-CAPS;
+  background-color: #181a1c;
+  cursor: pointer;
+  position: relative;
+}
+
+side.account tab.show {
+  width: calc(100% - 20px);
+  height: 24px;
+  display: block;
+  padding: 10px;
+  line-height: 24px;
+  text-align: center;
+  font-weight: bold;
+  color: #ffffff;
+  font-variant: SMALL-CAPS;
+  background-color: #00aaff;
+  cursor: pointer;
+  position: relative;
+}
+
+side.account tab.show:after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: -32px;
+  border: 16px solid;
+  border-color: transparent transparent transparent #00aaff;
 }
 
 side discord {
@@ -171,10 +231,22 @@ side member settings, side member posts, side member joined {
   font-size: 0.8em;
 }
 
+side member settings a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+side member settings a:hover {
+  text-decoration: underline;
+}
+
 topics {
   display: block;
+  top: 200px;
+  position: absolute;
   width: calc(90% - 250px);
-  margin: calc(5% - 10px) 5%;
+  margin: 5%;
+  margin-top: calc(5% - 20px);
   color: #ffffff;
 }
 
@@ -191,7 +263,7 @@ topic {
   background-color: #222628;
   display: block;
   width: 100%;
-  margin: 10px 0;
+  margin: 20px 0;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -231,4 +303,30 @@ forum thread name {
 forum thread>author,topic thread>date {
   display: inline-block;
   font-size: 12px;
+}
+
+content {
+  display: none;
+  padding: 20px;
+  width: calc(90% - 290px);
+  position: absolute;
+  top: calc(5% + 220px);
+  right: 5%;
+  background-color: #222628;
+  border-radius: 5px;
+  overflow: hidden;
+  color: #ffffff;
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.16), 2px 2px 10px 0 rgba(0,0,0,0.16)!important;
+}
+
+content id>avatar {
+  display: inline-block;
+  height: 100px;
+  width: 100px;
+  background-size: 100px;
+  vertical-align: top;
+}
+
+content h2 {
+  text-align: center;
 }

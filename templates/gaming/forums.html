@@ -4,10 +4,8 @@
     <link rel="stylesheet" href="/static/{{ version }}/gaming/main.css"/>
   </head>
   <body>
-    <header style="width: calc(100% - 250px);margin: 0;">
-      <h2 style="padding: 42.5px 0 8px 0;">
-        Piggah Bro Studios
-      </h2>
+    <header style="width: calc(100% - 250px);margin: 0;top:0">
+      <h2>Piggah Bro Studios</h2>
       Community Forums
       <main style="font-size: 0.6em; width: 50%; margin: auto;">
         <section>
@@ -61,7 +59,7 @@
         <name>Welcome, {{ name | safe }}!</name>
         <joined style="margin-bottom:1em;">Joined on {{ joined | safe }}</joined>
         <posts>posts: {{ posts | safe }}</posts>
-        <settings><a>Account Settings</a></settings>
+        <settings><a href="/gaming/account">Account Settings</a></settings>
       </member>
       {% else %}
       <member style="text-align: center; padding: 20px 10px;">
@@ -130,6 +128,8 @@
         document.getElementById('om').innerText = data.members.length
       })
     }, 10000);
+    
+    var forums = {{ forum | safe }}
     </script>
   </body>
 </html>

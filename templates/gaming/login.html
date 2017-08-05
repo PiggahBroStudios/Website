@@ -134,8 +134,9 @@
         <br>
         <input name="type" value="signup" class="hidden"/>
         <span>Required</span>
-        <input placeholder="Username"name="username"required/>
-        <input placeholder="Password"type="password"name="password"required/>
+        <input placeholder="Username"name="username"required pattern="^[a-zA-Z0-9-_\.]{6,18}$"/>
+        <input placeholder="Password"type="password"name="password"required pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$
+"/>
         <input placeholder="Confirm Password"type="password"name="password2"required/>
         <input placeholder="Email"type="email"name="email"required/>
         <span>Optional</span>

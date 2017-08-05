@@ -38,16 +38,14 @@ handler.setLevel(logging.ERROR)
 app.logger.addHandler(handler)
 
 app.config.update(
-    SQLALCHEMY_DATABASE_URI = CONFIG['mysql']['full_uri']
+    SQLALCHEMY_DATABASE_URI = CONFIG['mysql']['full_uri'],
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 )
 
 Markdown(app)
 oid = OpenID(app)
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
-
-####  MAKE SURE TO UPDATE VARIABLES ABOVE IF NECESSARY!  ####
-#### ONLY COPY AND PASTE STUFF BELOW THIS LINE TO SERVER ####
 
 ## Set up session variables
 
@@ -469,6 +467,37 @@ class members(db.Model):
           test.error = 'User was not found!'
           return test
 
+class forum_threads(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(50))
+    topic = db.Column(db.String(50))
+    subtopic = db.Column(db.String(50))
+    author_id = db.Column(db.String(10))
+    privilege = db.Column(db.String(10))
+    error = None
+
+    @staticmethod
+    def get_threads(topic, subtopic):
+        results = forum_threads.query.filter_by(topic=topic).filter_by(subtopic=subtopic).all()
+        if results is not None:
+          data
+          for result in results:
+            author = members.query.filter_by(id=result.author_id).first()
+            data = {
+              'title': result.title,
+              'topic': result.topic,
+              'subtopic': result.subtopic,
+              'author': {
+                'id': result.author_id,
+                'name': author.nickname
+              },
+              'privilege': result[0].privilege,
+            }
+          print(data)
+          return data
+        else:
+          result.error = 'Threads were not found!'
+          return result
 
 _steam_id_re = re.compile('steamcommunity.com/openid/id/(.*?)$')
 
@@ -545,10 +574,13 @@ def gaming_login_steam():
 def update_forum_user(resp):
     match = _steam_id_re.search(resp.identity_url)
     g.user = members.get_or_create(match.group(1))
-    steamdata = get_steam_userinfo(g.user.steam_id) ## Break Point
-    g.user.nickname = steamdata['personaname']
-    g.user.avatar = steamdata['avatarfull']
-    g.user.realname = steamdata['realname']
+    steamdata = get_steam_userinfo(g.user.steam_id)
+    print(g.user)
+    if g.user.nickname == None:
+      g.user.nickname = steamdata['personaname']
+      g.user.avatar = steamdata['avatarfull']
+      if steamdata['realname']:
+        g.user.realname = steamdata['realname']
     db.session.commit()
     session['user_id'] = g.user.id
     return redirect(oid.get_next_url())
@@ -564,9 +596,24 @@ def gaming_logout():
 def gaming():
     return render_template('gaming/index.html', version=VERSION)
 
+@app.route('/gaming/account')
+@app.route('/gaming/account/')
+def gaming_account():
+  if g.user:
+    _name = Markup.escape(g.user.nickname)
+    _format_before = "%Y-%m-%d %H:%M:%S"
+    _format_after = "%b %d, %Y %w:%y %p"
+    _avatar = g.user.avatar
+    _joined = datetime.datetime.strptime(str(g.user.joined), _format_before).strftime(_format_after)
+    return render_template('gaming/account.html',\
+            name=_name,joined=_joined,img=_avatar,version=VERSION)
+  else:
+    return redirect(url_for("gaming_login"))
+
 @app.route('/gaming/forums')
 @app.route('/gaming/forums/')
 def gaming_forums():
+  fupdates = forum_threads.get_threads('Development', 'Forum Updates')
   if g.user:
     _name = Markup.escape(g.user.nickname)
     _posts = Markup.escape(g.user.posts)
@@ -574,9 +621,10 @@ def gaming_forums():
     _format_after = "%b %d, %Y %w:%y %p"
     _joined = datetime.datetime.strptime(str(g.user.joined), _format_before).strftime(_format_after)
     return render_template('gaming/forums.html',\
-            name=_name,posts=_posts,joined=_joined,version=VERSION)
+            name=_name,posts=_posts,joined=_joined,\
+            version=VERSION,forum=fupdates)
   else:
-    return render_template('gaming/forums.html', version=VERSION)
+    return render_template('gaming/forums.html',forum=fupdates,version=VERSION)
     
 ## Github Payload Management
 
