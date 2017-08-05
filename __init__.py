@@ -480,7 +480,6 @@ class forum_threads(db.Model):
     def get_threads(topic, subtopic):
         results = forum_threads.query.filter_by(topic=topic).filter_by(subtopic=subtopic).all()
         if results is not None:
-          data
           for result in results:
             author = members.query.filter_by(id=result.author_id).first()
             data = {
@@ -491,7 +490,7 @@ class forum_threads(db.Model):
                 'id': result.author_id,
                 'name': author.nickname
               },
-              'privilege': result[0].privilege,
+              'privilege': result.privilege,
             }
           print(data)
           return data
@@ -579,6 +578,7 @@ def update_forum_user(resp):
     if g.user.nickname == None:
       g.user.nickname = steamdata['personaname']
       g.user.avatar = steamdata['avatarfull']
+      app.logger.error(steamdata)
       if steamdata['realname']:
         g.user.realname = steamdata['realname']
     db.session.commit()
