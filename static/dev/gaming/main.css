@@ -1,0 +1,168 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial Black", Gadget, sans-serif;
+}
+
+body {
+  background: url("../../image/background.png");
+}
+
+header {
+  display: block;
+  font-weight: bold;
+  font-family: "Arial Black", Gadget, sans-serif;
+  background-color: #222628;
+  margin: auto;
+  height: 200px;
+  text-decoration: none;
+  color: white;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+logo {
+  background: url(../../image/logo2.png);
+  background-size: contain;
+  display: block;
+  width: 180px;
+  height: 180px;
+  position: absolute;
+  top: 10;
+  left: 10;
+}
+
+main {
+  display: block;
+  width: 90%;
+  padding: 1% 5%;
+  color: #FFFFFF;
+}
+
+section {
+  display: block;
+  width: 95%;
+  margin: 25px auto 25px auto;
+}
+
+section title {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.25em;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+section collums {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  text-align: center;
+}
+
+section collums collum {
+  flex: 1;
+  text-align: center;
+}
+
+section collum subtitle, section collum info {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+section collum subtitle {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+section collum a {
+  display: block;
+  width: 90%;
+  margin: auto;
+  height: 2em;
+  font-size: 0.9em;
+  line-height: 2em;
+  font-weight: bold;
+  font-style: italic;
+  border-radius: 3px;
+  background-color: #00aaff;
+  border: 0;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+side {
+  width: 250px;
+  height: 100vh;
+  display: block;
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: #222628;
+}
+
+side discord {
+  display: block;
+  width: calc(100% - 30px);
+  padding: 15px;
+  color: #FFFFFF;
+  line-height: 2em;
+  background-color: #738bd7;
+}
+
+side discord title {
+  display: inline-block;
+  width: 100px;
+  font-size: 1.3em;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+side discord members {
+  vertical-align: middle;
+  display: inline-block;
+  color: #FFFFFF;
+  width: 115px;
+  font-size: 14px;
+  line-height: 1em;
+}
+
+side discord span {
+  width: 100%;
+  display: block;
+  text-align: center;
+}
+
+side discord span a {
+  background-color: #555555;
+  display: inline-block;
+  text-decoration: none;
+  float: right;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #FFFFFF;
+  width: 120px;
+  height: 30px;
+}
+
+side member {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 10px;
+  background: #171a1c;
+  color: #eeeeee;
+}
+
+side member name {
+  display: block;
+  width: 100%;
+}
+
+side member settings, side member posts, side member joined {
+  display: block;
+  width: 100%;
+  font-size: 0.8em;
+}

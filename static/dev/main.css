@@ -41,7 +41,7 @@ pre {
   font-size: 1.5em;
   height: 200px;
   text-align: center;
-  background: #000 url("../image/background.png") no-repeat;
+  background: #555 url("../image/background.png") no-repeat;
 }
 
 footer {
@@ -79,12 +79,16 @@ section aside.twitter {
   padding: 0;
   margin: 10px 5px 10px 15px;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+  overflow: hidden;
+}
+section aside.twitter iframe {
+  margin-bottom: -5px;
 }
 
 section main {
   vertical-align: top;
   display: inline-block;
-  width: calc(100% - 318.5px);
+  width: calc(100% - 629px);
   padding: 10px;
   margin: 12px 10px 12px 5px;
   border-radius: 5px;
@@ -122,6 +126,7 @@ nav ul {
     overflow: hidden;
     background-color: #FFF;
     margin-bottom: -4px;
+    padding: 0;
 }
 
 nav li {
@@ -215,6 +220,7 @@ post {
     padding: 5px;
     border-bottom: 1px solid #ddd;
     text-decoration: none;
+    position: relative;
 }
 
 post title {
@@ -238,21 +244,19 @@ post summary {
     white-space: nowrap;
     overflow: hidden;
     height: 1.25em;
-    position: static; /* use relative when using :before */
-}
-/*
-post summary:before {
-    content: '';
-    width: inherit;
-    background: linear-gradient(90deg, transparent 90%, white);
-    height: 14px;
-    position: absolute;
+    position: relative; /* use relative when using :before */
 }
 
-post:hover post summary:before {
-    background: linear-gradient(90deg, transparent 90%, #ddd);
+post:before {
+    content: '';
+    width: 100%;
+    background: linear-gradient(90deg, transparent 90%, white);
+    height: 100%;
+    margin: -5px 0px 0 -5px;
+    position: absolute;
+    z-index: 1;
 }
-*/
+
 listContainer {
     width: 90%;
     min-width: 500px;
@@ -296,8 +300,16 @@ items.list {
     margin: auto;
 }
 
-list a:hover, a.service:hover, post:hover {
+list a:hover, a.service:hover {
     background: #ddd;
+}
+
+post:hover {
+  background: #eee;
+}
+
+post:hover:before {
+  background: linear-gradient(90deg, transparent 90%, #eee);
 }
 
 post:hover > title, list a:hover > name, a.service:hover > title {
@@ -388,6 +400,12 @@ blogContainer {
     margin-top: 10px;
 }
 
+@media  only screen and (max-width: 925px) {
+    .ft-cl { width: 50%; }
+    .ft-cr { width: 25%; }
+    .ft-cc { width: 25%; }
+}
+
 @media  only screen and (max-width: 640px) {
     .ft-cl { float: left; width: 100%; }
     .ft-cr { float: left; width: 100%; }
@@ -401,6 +419,7 @@ blogContainer {
     .dropdown:hover .dropdown-content { display: none; }
     list { display: block; width: calc(100% - 10px); }
     listContainer { width: 100%; min-width: 100%; }
+    .container { width: 100% !important; }
 }
 
 #delete {
@@ -410,4 +429,41 @@ blogContainer {
     border-radius: 1.7em;
     margin: 5px;
     cursor: pointer;
+}
+
+.container {
+    display: -webkit-inline-block;
+    display: inline-block;
+    width: 49.5%;
+    vertical-align: top;
+}
+
+.item {
+    width: calc(100% - 40px);
+    margin: 10px;
+    padding: 0 10px;
+}
+
+.item table, .tile table {
+    width: calc(100% - 40px);
+}
+
+.title {
+    text-align: center;
+}
+
+.tile-container {
+    display: inline-block;
+    min-width: 200px;
+    max-width: 400px;
+    width: 25%;
+    margin: auto;
+    vertical-align: top;
+}
+
+.tile {
+    width: 100%;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    border-radius: 3px;
+    margin: 1em 0;
 }
