@@ -2,22 +2,73 @@
   <head>
     <title>Community Forums</title>
     <link rel="stylesheet" href="/static/{{ version }}/gaming/main.css"/>
+    <style>
+      content>form {
+        width: 250px;
+        margin: auto;
+      }
+      content>form>input {
+        border: 0;
+        color: #ffffff;
+        text-align: left;
+        border-bottom: 2px solid #aaa;
+        background-color: #222628;
+        padding: 5px 5px 0 5px;
+        font-size: 1em;
+        margin: 2px 0;
+        width: 100%;
+      }
+      content>form>button {
+        border: 0;
+        padding: 5px;
+        margin: 2px 0;
+        font-size: 1em;
+        background-color: #ffffff;
+        border-radius: 5px;
+        width: 100%;
+        cursor: pointer;
+      }
+      content>form>input:before,
+      content>form>input:after {
+        transition: all 0.4s ease-in-out;
+      }
+      content>form>input:hover,
+      content>form>input:focus,
+      content>form>input:active {
+        border-bottom: 2px solid #00aaff;
+        outline: 0;
+        transition: all 0.4s ease-in-out;
+      }
+      .steam {
+        display: inline-block;
+        padding: 10px 0 6px 0;
+        background: url(/static/image/steam_button.png) no-repeat;
+        width: 180px;
+        vertical-align: initial;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
-    <header>
+    <header style="position: fixed; top: 0;">
       <h2>Piggah Bro Studios</h2>
       {{ name | safe }}'s Account Settings
       <logo></logo>
     </header>
     <side class="account">
-      <tab id="gen" class="show" onclick="viewPage('gen')">General</tab>
+      <tab id="general" class="show" onclick="viewPage('general')">General</tab>
       {% if g.user.username != None %}
-      <tab id="mln" onclick="viewPage('mln')">Manage Login</tab>
+      <tab id="change-password" onclick="viewPage('change-password')">Change Password</tab>
       {% else %}
-      <tab id="cln" onclick="viewPage('cln')">Create Login</tab>
+      <tab id="create-login" onclick="viewPage('create-login')">Create Login</tab>
+      {% endif %}
+      {% if g.user.steam_id != None %}
+      <tab id="deactivate-steam-login" onclick="viewPage('deactivate-steam-login')">Deactivate Steam Login</tab>
+      {% else %}
+      <tab id="create-steam-login" onclick="viewPage('create-steam-login')">Create Steam Login</tab>
       {% endif %}
     </side>
-    <content id="_gen">
+    <content id="_general">
       <id>
         <avatar style="background-image:url({{ img }});"></avatar>
         <span style="display: inline-block">
@@ -26,17 +77,82 @@
         <span>
       </id>
     </content>
-    <content id="_mln">
-      <h2>Manage Login</h2>
+    {% if g.user.username != None %}
+    <content id="_change-password">
+      <h2>Change Password</h2><br>
+      <span style="text-align: center;display: block;">
+        You can change your password with the following form!
+      </span>
+      <form action="" method="post">
+        <br>
+        <err style="display:block;color:#f00;font-size:0.9em;text-align:center;">
+          {{ perr | safe }}
+        </err>
+        <br>
+        <input name="form"value="manage_login"style="display:none;">
+        <input placeholder="Old Password" type="password" name="password_old" required/><br><br>
+        <input placeholder="New Password" type="password" name="password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_=+-]).{8,}$"/>
+        <input placeholder="Confirm Password" type="password" name="password2" required/><br><br>
+        <button type="submit" class="submit">Change!</button>
+      </form>
     </content>
-    <content id="_cln">
-      <h2>Create Login</h2>
+    {% else %}
+    <content id="_create-login">
+      <h2>Create Login</h2><br>
+      <span style="text-align: center;display: block;">
+        We have noticed that you don't have a manual login!<br>
+        You can set one up with this form below!
+      </span><br>
+      <span style="display:block;text-align:center">
+        Password needs to contain the following:<br>
+        A letter a-z, A-Z, and a special character!
+      </span>
+      <form action="" method="post"><br>
+        <err style="display:block;color:#f00;font-size:0.9em;text-align:center;">
+          {{ error | safe }}
+        </err>
+        <br>
+        <input name="form"value="create_login"style="display:none;">
+        <input placeholder="Username"name="username"required pattern="^[a-zA-Z0-9-_\.]{6,18}$"/>
+        <input placeholder="Email"type="email"name="email"required/>
+        <input placeholder="Password"type="password"name="password"required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_=+-]).{8,}$"/>
+        <input placeholder="Confirm Password"type="password"name="password2"required/><br><br>
+        <button type="submit" class="submit">Create!</button>
+      </form>
     </content>
+    {% endif %}
+    {% if g.user.steam_id != None %}
+    <content id="_deactivate-steam-login">
+      <h2>Deactivate Steam Login</h2><br>
+      <span style="text-align: center;display: block;">
+        To remove your Steam login from your account<br>
+        please click the checkbox and then remove.
+      </span><br>
+      <err style="display:block;color:#f00;font-size:0.9em;text-align:center;">
+        {{ derr | safe }}
+      </err><br>
+      <form action="" method="post">
+        <input name="form"value="remove_steam"style="display:none;">
+        <span style="display:block;text-align:center">Remove Account</span>
+        <input type="checkbox" name="remover"required/><br><br>
+        <button type="submit" class="submit">Remove!</button>
+      </form>
+    </content>
+    {% else %}
+    <content id="_create-steam-login">
+      <h2>Create Steam Login</h2><br>
+      <span style="display: block;text-align: center;">
+        <err style="display:block;color:#f00;font-size:0.9em;text-align:center;">
+          {{ serr | safe }}
+        </err>
+        <br>Create a new Steam login with one simple click!<br><br>
+        <a href="/gaming/account/steam"class="steam">&nbsp</a><span>
+    </content>
+    {% endif %}
     <script>
-      var cbtn = document.getElementById('gen')
-      var cpg = document.getElementById('_gen')
-      
-      cpg.setAttribute('style', 'display: block;')
+      var ctag = ""
+      var cbtn = document.getElementById('general')
+      var cpg = document.getElementById('_general')
       
       var viewPage = function(pg) {
         let nbtn = document.getElementById(pg)
@@ -46,8 +162,33 @@
         cbtn.setAttribute('class', '')
         nbtn.setAttribute('class', 'show')
         
+        window.location.hash = pg
         cbtn = nbtn
         cpg = npg
+      }
+      
+      if (window.location.hash == ""){
+        cpg.setAttribute('style', 'display: block;')
+        window.location.hash = "general"
+      } else {
+        let hash = window.location.hash.slice(1,window.location.hash.length)
+        try {
+          viewPage(hash)
+        } catch(err) {
+          viewPage('general')
+        }
+      }
+      
+      var update = function(){
+        let hash = window.location.hash.slice(1,window.location.hash.length)
+        if (ctag != hash) {
+          try {
+            viewPage(hash)
+          } catch(err) {
+            viewPage('general')
+          }
+        }
+        window.requestAnimationFrame(update)
       }
     </script>
   </body>

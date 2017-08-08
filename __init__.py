@@ -44,6 +44,7 @@ app.config.update(
 
 Markdown(app)
 oid = OpenID(app)
+oid2 = OpenID(app)
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
 
@@ -427,15 +428,29 @@ class members(db.Model):
     email = db.Column(db.String(100))
     joined = db.Column(db.String(20))
     error = None
+    steamerror = None
 
     @staticmethod
     def get_or_create(steam_id):
         rv = members.query.filter_by(steam_id=steam_id).first()
         if rv is None:
-            rv = members()
-            rv.steam_id = steam_id
-            db.session.add(rv)
+            if g.user:
+                g.user.steam_id = steam_id
+                db.session.commit()
+            else:
+                rv = members()
+                rv.steam_id = steam_id
+                db.session.add(rv)
         return rv
+        
+    def check_for_steam(steam_id):
+        rv = members.query.filter_by(steam_id=steam_id).first()
+        if rv is None:
+            if g.user:
+                g.user.steam_id = steam_id
+                db.session.commit()
+                return True
+        return False
 
     @staticmethod
     def create_user(username, email):
@@ -455,6 +470,17 @@ class members(db.Model):
         return test
 
     @staticmethod
+    def check_for_user(username, email):
+        test = members()
+        test1 = members.query.filter_by(username=username).first()
+        test2 = members.query.filter_by(email=email).first()
+        if test1 is not None:
+          test.error = "Username has been taken!"
+        elif test2 is not None:
+          test.error = "Email has been taken!"
+        return test.error
+
+    @staticmethod
     def get_user(username, password):
         test = members.query.filter_by(username=username).first()
         if test is not None:
@@ -471,28 +497,57 @@ class forum_threads(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
     topic = db.Column(db.String(50))
+    created = db.Column(db.String(20))
     subtopic = db.Column(db.String(50))
     author_id = db.Column(db.String(10))
     privilege = db.Column(db.String(10))
     error = None
 
     @staticmethod
-    def get_threads(topic, subtopic):
-        results = forum_threads.query.filter_by(topic=topic).filter_by(subtopic=subtopic).all()
+    def get_threads(topic):
+        results = forum_threads.query.filter_by(topic=topic).all()
         if results is not None:
+          data = []
           for result in results:
             author = members.query.filter_by(id=result.author_id).first()
-            data = {
-              'title': result.title,
-              'topic': result.topic,
-              'subtopic': result.subtopic,
-              'author': {
-                'id': result.author_id,
-                'name': author.nickname
-              },
-              'privilege': result.privilege,
-            }
-          print(data)
+            _format = "%b %d, %Y %-I:%M %p"
+            _created = result.created.strftime(_format)
+            _author = "%s" % Markup.escape(author.nickname)
+            _topic_test = False
+            for t in data:
+              if t['topic'] == result.topic:
+                _topic_test = True
+            if _topic_test == False:
+              data.append({
+                'topic': result.topic,
+                'subtopics': [{
+                  'subtopic': result.subtopic,
+                  'thread': {
+                    'title': result.title,
+                    'created': _created,
+                    'author': {
+                      'id': result.author_id,
+                      'name': _author
+                    },
+                    'privilege': result.privilege,
+                  }
+                }]
+              })
+            else:
+              for x in data:
+                if x['topic'] == result.topic:
+                  x['subtopics'].append({
+                    'subtopic': result.subtopic,
+                    'thread': {
+                      'title': result.title,
+                      'created': _created,
+                      'author': {
+                        'id': result.author_id,
+                        'name': _author
+                      },
+                      'privilege': result.privilege,
+                    }
+                  })
           return data
         else:
           result.error = 'Threads were not found!'
@@ -568,21 +623,43 @@ def gaming_login_steam():
         return redirect(oid.get_next_url())
     else:
         return oid.try_login("http://steamcommunity.com/openid")
-
 @oid.after_login
 def update_forum_user(resp):
     match = _steam_id_re.search(resp.identity_url)
     g.user = members.get_or_create(match.group(1))
     steamdata = get_steam_userinfo(g.user.steam_id)
-    print(g.user)
     if g.user.nickname == None:
       g.user.nickname = steamdata['personaname']
       g.user.avatar = steamdata['avatarfull']
       if 'realname' in steamdata:
         g.user.realname = steamdata['realname']
+    elif g.user.avatar == None:
+      g.user.avatar = steamdata['avatarfull']
     db.session.commit()
     session['user_id'] = g.user.id
     return redirect(oid.get_next_url())
+
+@app.route("/gaming/account/steam")
+@app.route("/gaming/account/steam/")
+@oid2.loginhandler
+def gaming_add_steam():
+    return oid.try_login("http://steamcommunity.com/openid")
+
+@oid2.after_login
+def update_user(resp):
+    match = _steam_id_re.search(resp.identity_url)
+    check = members.check_for_steam(match.group(1))
+    if check == True:
+      steamdata = get_steam_userinfo(g.user.steam_id)
+      if g.user.nickname == None:
+        g.user.nickname = steamdata['personaname']
+      if g.user.avatar == None:
+        g.user.avatar = steamdata['avatarfull']
+      db.session.commit()
+      return redirect(oid.get_next_url())
+    else:
+      session['steamerror'] = "Steam ID already in use!"
+      return redirect(url_for('gaming_account')+'#create-steam-login')
 
 @app.route('/gaming/logout')
 @app.route('/gaming/logout/')
@@ -595,8 +672,8 @@ def gaming_logout():
 def gaming():
     return render_template('gaming/index.html', version=VERSION)
 
-@app.route('/gaming/account')
-@app.route('/gaming/account/')
+@app.route('/gaming/account', methods=['GET', 'POST'])
+@app.route('/gaming/account/', methods=['GET', 'POST'])
 def gaming_account():
   if g.user:
     _name = Markup.escape(g.user.nickname)
@@ -604,15 +681,79 @@ def gaming_account():
     _format_after = "%b %d, %Y %-I:%M %p"
     _avatar = g.user.avatar
     _joined = datetime.datetime.strptime(str(g.user.joined), _format_before).strftime(_format_after)
-    return render_template('gaming/account.html',\
-            name=_name,joined=_joined,img=_avatar,version=VERSION)
+    if request.method == "GET":
+      if 'steamerror' in session:
+        _error = Markup.escape(session['steamerror'])
+        print(_error)
+        session.pop('steamerror')
+        return render_template('gaming/account.html',\
+                name=_name,joined=_joined,img=_avatar,\
+                serr=_error, version=VERSION)
+      else:
+        return render_template('gaming/account.html',\
+                name=_name,joined=_joined,img=_avatar, version=VERSION)
+    else:
+      if request.form['form'] == "create_login":
+        _pass1 = request.form['password']
+        _pass2 = request.form['password2']
+        _username = request.form['username']
+        _email = request.form['email']
+        if _pass1 != _pass2:
+          return render_template('gaming/account.html',name=_name,\
+                  joined=_joined,img=_avatar,error="Passwords do not match!",\
+                  version=VERSION)
+        _check = members.check_for_user(_username, _email)
+        if _check == None:
+          _password = generate_password_hash(_pass1)
+          g.user.password = _password
+          g.user.username = _username
+          g.user.email = _email
+          db.session.commit()
+          return render_template('gaming/account.html',\
+                  name=_name,joined=_joined,img=_avatar,version=VERSION)
+        else:
+          return render_template('gaming/account.html',name=_name,\
+                  joined=_joined,img=_avatar,error=_check,version=VERSION)
+      elif request.form['form'] == "manage_login":
+        _old_pass = request.form['password_old']
+        _pass1 = request.form['password']
+        _pass2 = request.form['password2']
+        if _pass1 != _pass2:
+          return render_template('gaming/account.html',name=_name,\
+                  joined=_joined,img=_avatar,error="Passwords do not match!",\
+                  version=VERSION)
+        if check_password_hash(g.user.password, _old_pass):
+          _password = generate_password_hash(_pass1)
+          g.user.password = _password
+          db.session.commit()
+          return render_template('gaming/account.html',\
+                  name=_name,joined=_joined,img=_avatar,version=VERSION)
+        else:
+          return render_template('gaming/account.html',name=_name,\
+                  joined=_joined,img=_avatar,version=VERSION,\
+                  perr="Old password does not match database")
+      elif request.form['form'] == "remove_steam":
+        if g.user.username != None and g.user.password != None:
+          g.user.steam_id = None
+          db.session.commit()
+          return render_template('gaming/account.html',\
+                  name=_name,joined=_joined,img=_avatar,version=VERSION)
+        else:
+          return render_template('gaming/account.html',name=_name,\
+                  joined=_joined,img=_avatar,version=VERSION,\
+                  derr="Please create a login before deactivating Steam login!")
+      else:
+        return render_template('gaming/account.html',\
+                name=_name,joined=_joined,img=_avatar,\
+                error="This form is not developed on the server side yet",\
+                version=VERSION)
   else:
     return redirect(url_for("gaming_login"))
 
 @app.route('/gaming/forums')
 @app.route('/gaming/forums/')
 def gaming_forums():
-  fupdates = forum_threads.get_threads('Development', 'Forum Updates')
+  fupdates = forum_threads.get_threads('Development')
   if g.user:
     _name = Markup.escape(g.user.nickname)
     _posts = Markup.escape(g.user.posts)
