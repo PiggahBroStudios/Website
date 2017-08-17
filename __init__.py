@@ -25,10 +25,15 @@ LOCATION = CONFIG['app']['location']
 SECRETS = CONFIG['web']
 STATIC = LOCATION + 'static/'
 BLOGS = LOCATION + 'blog.json'
-VERSION = CONFIG['app']['version']
 HOST = CONFIG['app']['host']
 DEBUG = CONFIG['app']['debug']
 PORT = CONFIG['app']['port']
+
+######## Manual Version Override ########
+
+VERSION = '6.1' #CONFIG['app']['version']
+
+#########################################
 
 STEAM_API_KEY = CONFIG['steam']['api_key']
 
@@ -490,8 +495,9 @@ class members(db.Model):
             test.error = 'Incorrect username or password!'
             return test
         else:
-          test.error = 'User was not found!'
-          return test
+          err = members()
+          err.error = 'Incorrect username or password!'
+          return err
 
 class forum_threads(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -778,7 +784,7 @@ def github_payload():
     github.log("Received package created at "+data['head_commit']['timestamp'])
     pull = github.pull()
     if pull == True:
-      return "Received package created at "+data['head_commit']['timestamp']
+      return "Successfully pulled package dated for "+data['head_commit']['timestamp']
     else: 
       return "Failed to pull package!" 
   else:
